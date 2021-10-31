@@ -1,0 +1,10 @@
+# pycharm
+.idea/
+py_wnet_pytorch.iml
+
+# custom
+datasets/
+logs/
+
+# pylint
+.pylintrc
