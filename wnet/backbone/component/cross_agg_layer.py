@@ -4,8 +4,8 @@ import torch.nn as nn
 
 class CrossAggLayer(nn.Module):
 
-    def __init__(self):
+    def __init__(self, channel):
         super(CrossAggLayer, self).__init__()
 
-    def forward(self):
+    def forward(self, x_detail, x_semi):
         pass
