@@ -5,6 +5,7 @@ py_wnet_pytorch.iml
 # custom
 datasets/
 logs/
+script.py
 
 # pylint
 .pylintrc
