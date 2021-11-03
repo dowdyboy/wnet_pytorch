@@ -1,6 +1,6 @@
 # pycharm
 .idea/
-py_wnet_pytorch.iml
+*.iml
 
 # custom
 datasets/
