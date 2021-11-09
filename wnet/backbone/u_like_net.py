@@ -29,9 +29,9 @@ class ULikeNet(nn.Module):
             BasicConv(256, 256, 3, 1, 1),
             BasicConv(256, 256, 3, 1, 1)
         )
-        self.d_tconv7_212 = nn.ConvTranspose2d(256, 128, kernel_size=2, padding=1, stride=2)
+        self.d_tconv7_212 = nn.ConvTranspose2d(256, 128, kernel_size=2, padding=0, stride=2)
         self.d_fuse8 = DFuseBlock(128)
-        self.d_tconv9_212 = nn.ConvTranspose2d(128, 64, kernel_size=2, padding=1, stride=2)
+        self.d_tconv9_212 = nn.ConvTranspose2d(128, 64, kernel_size=2, padding=0, stride=2)
         self.d_fuse10 = DFuseBlock(64)
         self.d_conv11_311 = BasicConv(64, 64, 3, 1, 1)
 
@@ -50,9 +50,9 @@ class ULikeNet(nn.Module):
             BasicResBlock(128)
         )
         self.s_spp9 = SPP(128)
-        self.s_tconv10_212 = nn.ConvTranspose2d(128, 64, kernel_size=2, padding=1, stride=2)
+        self.s_tconv10_212 = nn.ConvTranspose2d(128, 64, kernel_size=2, padding=0, stride=2)
         self.s_fuse11 = SFuseBlock(64)
-        self.s_tconv12_212 = nn.ConvTranspose2d(64, 32, kernel_size=2, padding=1, stride=2)
+        self.s_tconv12_212 = nn.ConvTranspose2d(64, 32, kernel_size=2, padding=0, stride=2)
         self.s_fuse13 = SFuseBlock(32)
         self.s_conv14_311 = BasicConv(32, 64, 3, 1, 1)
         self.s_lrres1 = LRResBlock(32)

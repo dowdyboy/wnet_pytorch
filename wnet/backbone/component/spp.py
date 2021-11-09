@@ -8,11 +8,11 @@ class SPP(nn.Module):
     def __init__(self, channel):
         super(SPP, self).__init__()
         self.conv311_1to1_1 = BasicConv(channel, channel, 3, 1, 1)
-        self.conv311_1to1_2 = BasicConv(channel, channel, 3, 1, 1)
         self.mp311 = nn.MaxPool2d(3, 1, 1)
         self.mp521 = nn.MaxPool2d(5, 1, 2)
         self.mp841 = nn.MaxPool2d(9, 1, 4)
         self.conv311_4to1 = BasicConv(4*channel, channel, 3, 1, 1)
+        self.conv311_1to1_2 = BasicConv(channel, channel, 3, 1, 1)
 
     def forward(self, x1):
         x2 = self.conv311_1to1_1(x1)

@@ -16,12 +16,15 @@ class SFuseBlock(nn.Module):
         self.conv101 = BasicConv(2*channel, channel, 1, 0, 1)
 
     def forward(self, x1, y1):
+        # TODO:这块是不是多了个点卷积
         x2 = self.depth_conv_1(x1)
-        x3 = self.point_conv_1(x2)
-        x4 = self.bn_1(x3)
+        # x3 = self.point_conv_1(x2)
+        # x4 = self.bn_1(x3)
+        x4 = self.bn_1(x2)
         y2 = self.depth_conv_2(y1)
-        y3 = self.point_conv_2(y2)
-        y4 = self.bn_2(y3)
+        # y3 = self.point_conv_2(y2)
+        # y4 = self.bn_2(y3)
+        y4 = self.bn_2(y2)
         z = torch.cat((x4, y4), dim=1)
         output = self.conv101(z)
         return output

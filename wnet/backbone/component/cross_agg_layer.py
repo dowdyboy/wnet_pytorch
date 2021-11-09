@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 from wnet.backbone.component.basic_conv import BasicConv
 
 
@@ -33,20 +34,25 @@ class CrossAggLayer(nn.Module):
 
     def forward(self, x_detail, x_semi):
         # 左1分支
+        # TODO:这块是不是多了个点卷积
         l11 = self.depth_conv_1(x_detail)
-        l12 = self.point_conv_1(l11)
-        l13 = self.bn_1(l12)
+        # l12 = self.point_conv_1(l11)
+        # l13 = self.bn_1(l12)
+        l13 = self.bn_1(l11)
         l14 = self.depth_conv_2(l13)
-        l15 = self.point_conv_2(l14)
-        l16 = self.bn_2(l15)
+        # l15 = self.point_conv_2(l14)
+        # l16 = self.bn_2(l15)
+        l16 = self.bn_2(l14)
         l17 = self.conv101(l16)
 
         # 左2分支
         l21 = self.conv2d311(x_semi)
         l22 = self.bn_3(l21)
         l23 = self.up_sample_1(l22)
-        m = nn.Sigmoid()
-        l24 = m(l23)
+        # TODO:Sigmoid用法不对
+        # m = nn.Sigmoid()
+        # l24 = m(l23)
+        l24 = F.sigmoid(l23)
 
         # 左分支合并
         l = torch.mul(l17, l24)
@@ -57,12 +63,16 @@ class CrossAggLayer(nn.Module):
         r13 = self.avg_pooling(r12)
 
         # 右2分支
+        # TODO:这块是不是多了个点卷积
         r21 = self.depth_conv_3(x_semi)
-        r22 = self.point_conv_3(r21)
-        r23 = self.bn_5(r22)
+        # r22 = self.point_conv_3(r21)
+        # r23 = self.bn_5(r22)
+        r23 = self.bn_5(r21)
         r24 = self.conv2d101(r23)
-        f = nn.Sigmoid()
-        r25 = f(r24)
+        # TODO:Sigmoid用法不对
+        # f = nn.Sigmoid()
+        # r25 = f(r24)
+        r25 = F.sigmoid(r24)
 
         # 右分支合并
         r = torch.mul(r13, r25)
