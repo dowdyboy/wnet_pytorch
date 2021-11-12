@@ -8,15 +8,19 @@ class WNetLoss(nn.Module):
     
     def __init__(self):
         super(WNetLoss, self).__init__()
+        # 定义像素级的交叉熵误差
         self.cel = nn.CrossEntropyLoss()
 
     def forward(self, x, gt):
         batch_size, _, h, w = x.size()
+        # 计算像素级交叉熵误差
         cel_loss = self.cel(x, gt)
+        # 计算区域面积损失误差，通过对比预测mask和GT的像素点个数来衡量面积，对面积做差，越小越好
         area = x.size(-1) * x.size(-2) * x.size(0)
         trans_x = ((x[:, 1, :, :] > x[:, 0, :, :]) * 1)
         area_loss = torch.square(torch.sum(trans_x) / area - torch.sum(gt) / area)
 
+        # 计算区域聚合度误差：采用寻找分类区域的外包框来衡量分类的聚合度，通过计算外包框、对角线长度的差值来实现，越小越好
         x_pos_all = []
         for i in range(batch_size):
             x_pos = torch.where(trans_x[i] == 1)
@@ -41,8 +45,10 @@ class WNetLoss(nn.Module):
         # print(gt_pos_center_x, gt_pos_center_y)
         # print(gt_pos_length)
 
+        # 计算外包框中心点平均距离，越小越好
         dist_c = torch.square(x_pos_center_x - gt_pos_center_x) + torch.square(x_pos_center_y - gt_pos_center_y)
         dist_c = torch.sum(dist_c) / batch_size
+        # 计算外包框对角线长度差平均值，越小越好
         dist_length = torch.square(x_pos_length - gt_pos_length)
         dist_length = torch.sum(dist_length) / batch_size
 
