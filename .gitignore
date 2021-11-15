@@ -10,6 +10,7 @@ script.py
 __pycache__/
 checkpoints/
 tmp.log
+out/
 
 # pylint
 .pylintrc

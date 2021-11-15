@@ -44,7 +44,9 @@ class XGZLDataset(Dataset):
         # new_label[new_label > 128] = 1
         new_label[new_label <= 128] = 0
         new_label[new_label > 128] = 1
-        return torch.from_numpy(np.array(new_im_raw)).permute(2, 1, 0).contiguous().type(torch.float) / 255., torch.from_numpy(new_label).permute(1, 0).contiguous().type(torch.long)
+        return torch.from_numpy(np.array(new_im_raw)).permute(2, 1, 0).contiguous().type(torch.float) / 255., \
+               torch.from_numpy(new_label).permute(1, 0).contiguous().type(torch.long), \
+               self.im_filename_list[idx]
 
     def __len__(self):
         return len(self.im_filename_list)

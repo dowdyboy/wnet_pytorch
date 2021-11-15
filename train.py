@@ -27,11 +27,12 @@ if __name__ == '__main__':
     conf.set_cuda(True)
     conf.set_class_config(class_list=['background', 'zl'])
     conf.set_input_shape(256, 256)
-    conf.set_train_info(10, 2, 1e-2)
+    conf.set_train_info(12, 2, 1e-2)
     conf.set_eval_interval(1)
     conf.set_checkpoint_config(1, './checkpoints')
     conf.set_num_worker(0)
     conf.set_log('logs/train.log')
+    # conf.set_pretrained_path('checkpoints/epoch10')
 
     logger = print if conf.log_file is None else MyNetLogger.default(conf.log_file)
     logger(conf)
@@ -59,7 +60,7 @@ if __name__ == '__main__':
         model_filename = None
         optimizer_filename = None
         lr_schedule_filename = None
-        epoch_filename =None
+        epoch_filename = None
         for filename in filename_list:
             if filename.find('model') > -1:
                 model_filename = filename
@@ -82,7 +83,7 @@ if __name__ == '__main__':
 
     for _ in range(ep_num, conf.epoch_num):
         model.train()
-        for bat_im, bat_label in train_loader:
+        for bat_im, bat_label, _ in train_loader:
             bat_im, bat_label = bat_im.to(device), bat_label.to(device)
             optimizer.zero_grad()
             out = model(bat_im)
@@ -96,7 +97,7 @@ if __name__ == '__main__':
 
         if conf.eval_every_num is not None and ep_num % conf.eval_every_num == 0:
             model.eval()
-            for bat_im, bat_label in val_loader:
+            for bat_im, bat_label, _ in val_loader:
                 with torch.no_grad():
                     bat_im, bat_label = bat_im.to(device), bat_label.to(device)
                     out = model(bat_im)
